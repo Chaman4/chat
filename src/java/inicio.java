@@ -61,6 +61,8 @@ public class inicio extends HttpServlet {
 
             HttpSession ses = request.getSession(true);
             ses.setAttribute("id", id);
+            
+            System.out.println(ses.getId());
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
