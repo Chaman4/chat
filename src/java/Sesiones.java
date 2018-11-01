@@ -19,7 +19,7 @@ import javax.websocket.Session;
  *
  * @author Jorge C
  */
-
+//quien te va a porbar tu proyecto? COVA PAOLA KARLA mm deja pienso algo para que no puedan petarlo vaaa o bueno no tan facil xdxd
 //Este archivo es para ver si alguien esta conectado o no xdxd
 //Lo que hay que hacer es ver quien esta conectado y ver si se le manda en tiempo real a esa persona el mensaje o se guarda en la db para mas tarde ok? ok
 @ApplicationScoped

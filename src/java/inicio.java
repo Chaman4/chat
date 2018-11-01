@@ -66,8 +66,6 @@ public class inicio extends HttpServlet {
             System.out.println(e.getMessage());
         }
     }
-    
-    listo chaman xdxd me despido mañana te sigo ayudando xdxd va que va , adelnato algo o ya mejor ni lo toco ? xd mm rifate el html del chat por fis xdxd va que va gracias pez, decsnsa igual chaman de nada
 
     /**
      * Returns a short description of the servlet.
