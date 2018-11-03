@@ -1,5 +1,6 @@
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
@@ -19,13 +20,14 @@ import javax.websocket.Session;
  *
  * @author Jorge C
  */
-//quien te va a porbar tu proyecto? COVA PAOLA KARLA mm deja pienso algo para que no puedan petarlo vaaa o bueno no tan facil xdxd
-//Este archivo es para ver si alguien esta conectado o no xdxd
-//Lo que hay que hacer es ver quien esta conectado y ver si se le manda en tiempo real a esa persona el mensaje o se guarda en la db para mas tarde ok? ok
+
 @ApplicationScoped
 public class Sesiones {
     
     private final Set<Session> sesiones = new HashSet<>();
+    private final ArrayList<Usuario> usuarios = new ArrayList<>();
+    private conexion bd = new conexion();
+    private Usuario usuario;
     
     public void addSession(Session session) {
         sesiones.add(session);
@@ -35,13 +37,13 @@ public class Sesiones {
         sesiones.remove(sesion);
     }
     
-    private void sendToAllConnectedSessions(String mensaje) {
+    public void sendToAllConnectedSessions(JsonObject mensaje) {
          for (Session sesion : sesiones) {
             sendToSession(sesion, mensaje);
         }
     }
     
-    private void sendToSession(Session sesion, String message) {
+    public void sendToSession(Session sesion, JsonObject message) {
         try {
             sesion.getBasicRemote().sendText(message.toString());
         } catch (IOException ex) {
@@ -61,11 +63,43 @@ public class Sesiones {
     }
     
     
+    public void addUser(String id_sesion, int id){
+        usuario = new Usuario();
+        usuario.setId_session(id_sesion);
+        usuario.setId(id);
+        usuarios.add(usuario);
+    }
     
-    /*Falta lo mas complicado por asi decirlo xd que es enlazar el id de la persona con el socket xdxd tj dme gustaria poder hacerlo de a soldado :( explica xdxd
-    Pues ve aqui lo que haces es tener las sesiones pero no sabemos a quien le corresponde cada sesion si me entiendes? 2/2
-    entonces tenemos que idear una manera de poder saber quien es quien weee 
-    */
+    public void updateUser(String id_sesion, String id_socket){
+        for(Usuario usuario: usuarios){
+            if(usuario.getId_session() == id_sesion){
+                usuario.setId_socket(id_socket);
+                System.out.println(usuario.getId_session() + "holaa");
+            }
+        }
+    }
     
+    public String getIdSocket(int id){
+        Usuario usuario_return = null;
+        String socket = "";
+        for(Usuario usuario : usuarios){
+            if(usuario.getId() == id){
+                socket = usuario.getId_socket();
+            }
+        }
+        return socket;
+    }
+    
+    public JsonObject createMessage(String message, String from){
+        JsonProvider provider = JsonProvider.provider();
+        JsonObject jsonmessage = provider.createObjectBuilder()
+                .add("message", message)
+                .add("from", from)
+                .build();
+        return jsonmessage;
+    }
+    
+    
+    
+   
 }
-//el hashset pa qye sirve sirve para ver quien esta conectado en el chat vamos a hacer una lista de quien esta conectado va? va

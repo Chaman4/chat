@@ -4,12 +4,14 @@
  * and open the template in the editor.
  */
 
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -17,18 +19,16 @@ import java.sql.Statement;
  */
 public class conexion {
 
+    Connection con;
+
     public static Connection getConnection() {
         String url, UserName, password;
         url = "jdbc:mysql://localhost/chat";
         UserName = "root";
         password = "n0m3l0";
-        //si son tus credenciales? credenciales?? bueno tu usuario y tu password ahh sii
         Connection con = null;
-        System.out.println("we");
         try {
-            System.out.println("htf");
             Class.forName("org.gjt.mm.mysql.Driver");
-            System.out.println("asd");
             con = DriverManager.getConnection(url, UserName, password);
             System.out.println("Si se conecto a BD");
         } catch (Exception e) {
@@ -39,11 +39,11 @@ public class conexion {
         return con;
     }
 
-    public static int registrarUsuario(String nombre) {
+    public int registrarUsuario(String nombre) {
         int generatedKey = 0;
         try {
 
-            Connection con = getConnection();
+            con = getConnection();
             String q;
             q = "INSERT INTO usuario (nombre) values ('" + nombre + "')";
             System.out.println(q);
@@ -55,14 +55,48 @@ public class conexion {
             if (rs.next()) {
                 generatedKey = rs.getInt(1);
             }
-            
+            con.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         return generatedKey;
     }
 
+    public int getUserId(String name) {
+
+        int id = 0;
+        try {
+            con = getConnection();
+
+            String query = "Select * FROM usuario WHERE nombre = '" + name + "'";
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                id = rs.getInt("id");
+            }
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(conexion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return id;
+    }
+
+    public String getName(int id) {
+        String name_return = "";
+        try {
+            con = getConnection();
+
+            String query = "Select * FROM usuario WHERE id = '" + id + "'";
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                name_return = rs.getString("nombre");
+            }
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(conexion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return name_return;
+    }
 }
 
-//me mando al cuando le quise cambiar el nombre xdxd si vi 
-//bueno nos vamos a pasar el paradigma orientado a objetos un poquito por los huevos xdxd a armando le emput

@@ -16,7 +16,9 @@ import javax.servlet.http.HttpSession;
  * @author Jorge C
  */
 public class inicio extends HttpServlet {
-
+    
+    private Sesiones sesion = new Sesiones();
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -53,6 +55,7 @@ public class inicio extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+           
             String nombre = request.getParameter("nombre");
 
             conexion bd = new conexion();
@@ -61,9 +64,10 @@ public class inicio extends HttpServlet {
 
             HttpSession ses = request.getSession(true);
             ses.setAttribute("id", id);
+           
+            sesion.addUser(ses.getId(), id);
             
-            System.out.println(ses.getId());
-
+            response.sendRedirect("mensaje.jsp");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
