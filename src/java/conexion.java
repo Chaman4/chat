@@ -46,7 +46,6 @@ public class conexion {
             con = getConnection();
             String q;
             q = "INSERT INTO usuario (nombre) values ('" + nombre + "')";
-            System.out.println(q);
             PreparedStatement ps = con.prepareStatement(q, Statement.RETURN_GENERATED_KEYS);
             ps.executeUpdate();
 
@@ -98,5 +97,48 @@ public class conexion {
         }
         return name_return;
     }
+    
+    public void addChat(int id1, int id2){
+        try{
+            con = getConnection();
+            String query = "INSERT INTO chat (id_usuario1, id_usuario2) SELECT * FROM (SELECT '" + id1 + "', '" + id2 + "') AS temporal WHERE NOT EXISTS ( SELECT * FROM chat WHERE (id_usuario1 = '" + id1 + "' AND id_usuario2 = '" + id2 + "') OR (id_usuario1 = '" + id2 + "' AND id_usuario2 = '" + id1 + "')) LIMIT 1";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.executeUpdate();
+        }catch(SQLException ex){
+            Logger.getLogger(conexion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public int getChat(int id1, int id2){
+        int id_return = 0;
+        try {
+            con = getConnection();
+
+            String query = "SELECT id_chat FROM chat WHERE ((id_usuario1 = '" + id1 + "' AND id_usuario2 = '" + id2 + "') OR (id_usuario1 = '" + id2 + "' AND id_usuario2 = '" + id1 + "')) LIMIT 1";
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                id_return = rs.getInt("id_chat");
+            }
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(conexion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return id_return;
+    }
+    
+    public void addMessage(int id1, int id2, String mensaje){
+       try {
+
+            con = getConnection();
+            String query = "a";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.executeUpdate();  
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+           
 }
 

@@ -55,7 +55,7 @@ public class SocketServer {
             } else {
                 //int receptor = bd.getUserId(jsonMessage.getString("to"));
                 int id_from = jsonMessage.getInt("from");
-                sesiones.sendToAllConnectedSessions(/*sesiones.getSession(sesiones.getIdSocket(receptor)),*/ sesiones.createMessage(jsonMessage.getString("mensaje"), db.getName(id_from)));
+                sesiones.sendToAllConnectedSessions(sesiones.createMessage(jsonMessage.getString("mensaje"), db.getName(id_from)));
                 
             }
         }
